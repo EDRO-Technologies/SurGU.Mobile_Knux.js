@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
+import * as React from 'react';
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { Text, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
@@ -11,16 +12,20 @@ import {
   IconButton,
   TextInput,
 } from "react-native-paper";
+// const Stack = createNativeStackNavigator();
 
-import { RegistratePage } from "./RegistratePage";
-import { HomePage } from "./HomePage";
-import { ChatPage } from "./ChatPage";
 
 import { Component } from "react";
+// import { createNativeStackNavigator } from "@react-na
 
-export default App = () => ViewPage();
 
-const ViewPage = () => {
+
+
+
+
+
+
+export const ViewPage = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
@@ -45,10 +50,10 @@ const ViewPage = () => {
   }, [])
 
   return (
-    <View className=" flex-1 flex-row w-full items-center justify-center  bg-blue-700">
-      <View className="border-4 border-red-600 w-full">
+    <View className=" flex-1 flex-col w-full items-center justify-center  bg-slate-200">
+      <View className="w-full h-full">
         <GiftedChat
-          className="border-4 border-red-600 flex-1 flex-row  "
+          className="flex-1 flex-row  "
           messages={messages}
           onSend={messages => onSend(messages)}
           user={{
