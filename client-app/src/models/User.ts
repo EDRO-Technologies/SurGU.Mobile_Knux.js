@@ -1,4 +1,14 @@
+
 export interface User {
-  name: string;
-  email: string;
+  id: number,
+  email: string,
+  firstName: string,
+  lastName: string;
+  picture: string;
 }
+
+export interface AccessToken {
+  accessToken: string;
+}
+
+export type UserToken = User & AccessToken;

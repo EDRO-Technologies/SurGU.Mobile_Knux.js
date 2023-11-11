@@ -1,8 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
 // Hello Wprld!
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { Get, UseGuards, Req } from '@nestjs/common';
+import { Get, UseGuards, Req, Post} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SocialUser } from './types/socialUser';
 import { HttpException, HttpStatus } from '@nestjs/common'
@@ -20,6 +20,18 @@ export class AuthController {
   @Get('yandex')
   @UseGuards(AuthGuard('yandex'))
   authYandex() {}
+
+  @Get('weeek/:token')
+  async weekLogin(@Param('token') token: string) {
+
+    try {
+      const socialUser = await this.authService.weeekLogin(token);
+      return this.authService.socialLogin(socialUser);
+    } catch {
+      throw new HttpException("Week user not found", HttpStatus.FORBIDDEN);
+    }
+
+  }
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))

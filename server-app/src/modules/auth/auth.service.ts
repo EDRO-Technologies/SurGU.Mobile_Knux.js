@@ -6,6 +6,7 @@ import { SocialUser } from './types/socialUser';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
+import axios, { AxiosHeaders } from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,30 @@ export class AuthService {
   jwtSign(payload: object): string {
     return this.jwtService.sign(payload, { secret: this.JWT_SECRET });
   } 
+
+  async weeekLogin(weeekToken: string): Promise<SocialUser> {
+    try {
+      const { data } = await axios.get(`https://api.weeek.net/public/v1/user/me`, {
+        headers: {
+          Authorization: `Bearer ${weeekToken}` 
+        }
+      });
+
+      const { user } = data;
+
+      const socialUser = new SocialUser({
+        email: user.email,
+        picture: user.logoLink,
+        firstName: user.firstName,
+        lastName: user.middleName ?? '',
+      })
+
+      return socialUser;
+
+    } catch (e) {
+      throw new Error('No weeek user');
+    }
+  }
 
   async socialLogin(user: SocialUser) {
     let dbUser = await this.userRepository.findOne({where: {
