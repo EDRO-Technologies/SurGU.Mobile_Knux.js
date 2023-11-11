@@ -14,5 +14,6 @@ import { User } from '../user/entities/user.entity';
   imports: [PassportModule, ConfigModule, TypeOrmModule.forFeature([User]) ],
   providers: [AuthService, GoogleStrategy, YandexStrategy, JwtStrategy, JwtService],
   controllers: [AuthController],
+  exports: [AuthService]
 })
 export class AuthModule {}

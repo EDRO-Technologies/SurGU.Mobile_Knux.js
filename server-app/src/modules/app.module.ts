@@ -9,6 +9,9 @@ import { PassportModule } from "@nestjs/passport";
 import { GoogleStrategy } from "./auth/strategies/google.strategy";
 import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ChatModule } from "./chats/chats.module";
+import { Message } from "./chats/entities/message.entity";
+import { Chat } from "./chats/entities/chat.entity";
 
 @Module({
   imports: [
@@ -25,7 +28,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
           database: configService.get<string>('DATABASE_NAME'),
           synchronize: true,
           logging: true,
-          entities: [User],
+          entities: [User, Message, Chat],
           subscribers: [],
           migrations: [],
         } as TypeOrmModuleOptions;
@@ -45,6 +48,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     ConfigModule.forRoot(),
     UserModule,
     AuthModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService],

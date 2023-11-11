@@ -43,8 +43,18 @@ export class AuthService {
     };
   }
 
+  async getUserFromToken(token: string): Promise<User | null> {
+    const payload = this.jwtService.verify(token, {
+      secret: this.JWT_SECRET,
+    });
 
-  async emailLogin(email: string, password: string) {
-    
+    const userId = payload as UserResponse;
+
+    if (userId) {
+        return this.userRepository.findOne({where: {
+          id: userId.id
+        }});
+    }
   }
+
 }

@@ -2,9 +2,11 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./modules/app.module";
 import { ConfigService } from "@nestjs/config/dist";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { IoAdapter } from "@nestjs/platform-socket.io";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   const config = app.get<ConfigService>(ConfigService);
 
