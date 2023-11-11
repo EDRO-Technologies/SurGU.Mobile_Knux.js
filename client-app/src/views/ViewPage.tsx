@@ -18,13 +18,6 @@ import {
 import { Component } from "react";
 // import { createNativeStackNavigator } from "@react-na
 
-
-
-
-
-
-
-
 export const ViewPage = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
