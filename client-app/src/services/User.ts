@@ -8,3 +8,9 @@ export async function getAll(): Promise<User[]> {
 
   return data as User[];
 }
+
+// export async function getUser(): Promise<User>{
+//   const { data } = await axios.get<User>(`${API_URL}/get`);
+
+//   return data as User;
+// }
