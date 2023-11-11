@@ -39,7 +39,11 @@ export class ChatService {
   }
 
   async createChat(name: string, user: User): Promise<Chat> {
-    return this.messageRep.save(this.chatRep.create({ name, creator: user }));
+    return this.chatRep.save(this.chatRep.create({ name, creator: user, users: [{...user}]  }));
+  }
+
+  async addToChat(chatId: number, userId: number) {
+    return this.chatRep.save({ id: chatId, users: [{id: userId}]  });
   }
 
   async addMessage(
@@ -53,6 +57,6 @@ export class ChatService {
   }
 
   async getAllMessagesFromChat(chatId: number): Promise<Message[]> {
-    return await this.messageRep.find({ where: { id: chatId } });
+    return await this.messageRep.find({ where: { chat: {id: chatId} } });
   }
 }

@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  ManyToMany
 } from 'typeorm';
 
 @Entity()
@@ -33,11 +34,14 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date;
+  
+  @OneToMany(() => Chat, chat => chat.creator)
+  creators: Chat[];
 
   @OneToMany(() => Message, message => message.user)
   messages: Message[];
 
-  @OneToMany(() => Chat, chat => chat.creator)
+  @ManyToMany(() => Chat, chat => chat.users)
   chats: Chat[];
 
   get fullName() {

@@ -1,4 +1,3 @@
-import { User } from "src/modules/user/entities/user.entity";
 import {
   Entity,
   Column,
@@ -7,6 +6,7 @@ import {
   OneToMany,
   ManyToOne,
 } from "typeorm";
+import { User } from "src/modules/user/entities/user.entity";
 import { Chat } from "./chat.entity";
 
 @Entity()
@@ -17,10 +17,10 @@ export class Message {
   @Column()
   text: string;
 
-  @ManyToOne(() => User, (x) => x.messages)
+  @ManyToOne(() => User, (user) => user.messages)//
   user: User;
 
-  @ManyToOne(() => Chat, (x) => x.messages)
+  @ManyToOne(() => Chat, (chat) => chat.messages)//
   chat: Chat;
 
   @CreateDateColumn()

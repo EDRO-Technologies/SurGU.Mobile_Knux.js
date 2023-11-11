@@ -36,10 +36,10 @@ export class ChatGateway implements OnGatewayConnection {
 
     const user = await this.chatsService.getUserFromSocket(socket);
 
-    console.log({chatName, user});
-
     const chat = await this.chatsService.createChat(chatName, user);
-    
+
+    console.log({chatName, user, chat});
+
     return chat;
   }
 
@@ -57,22 +57,37 @@ export class ChatGateway implements OnGatewayConnection {
     const { text, chatId } = msgBody;
     await this.chatsService.addMessage(text, user, chatId);
 
-    this.server.sockets.emit("receive_message", {
+    this.server.sockets.emit(`receive_message_${chatId}`, {
       text,
       user,
+    });
+  }
+
+  @SubscribeMessage("invite_to_chat")
+  async inviteToChat(
+    @MessageBody()
+    body: {chatId: string, userId: string},
+    @ConnectedSocket() socket: Socket
+  ) {
+    const { chatId, userId } = body;
+    await this.chatsService.addToChat(+chatId, +userId);
+
+    this.server.sockets.emit(`invite`, {
+      chatId, userId 
     });
   }
 
   @SubscribeMessage("get_all_messages")
   async getAllMessages(
     @MessageBody()
-    chatId: number,
+    chatId: string,
     @ConnectedSocket() socket: Socket
   ) {
     await this.chatsService.getUserFromSocket(socket);
-    const messages = await this.chatsService.getAllMessagesFromChat(chatId);
+    const messages = await this.chatsService.getAllMessagesFromChat(+chatId);
 
-    this.server.sockets.emit("receive_message", messages);
+    console.log({messages, chatId});
+    // this.server.sockets.emit("receive_message", messages);
 
     return messages;
   }
