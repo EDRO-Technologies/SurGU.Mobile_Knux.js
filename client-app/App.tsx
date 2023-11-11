@@ -1,32 +1,33 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { Text, View } from 'react-native';
-// import View1 from './src/views/View1';
-// import Chat from './src/views/Chat'
+
+
 import { Appbar, Button } from "react-native-paper";
 import { Avatar, Card, IconButton, TextInput, } from "react-native-paper";
 import { View, TouchableOpacity } from "react-native";
 
+
 import { RegistratePage } from "./src/views/RegistratePage";
-// import { HomePage } from "./src/views/HomePage";
+import { HomePage } from "./src/views/HomePage";
 import { ChatPage } from "./src/views/ChatPage";
 import { ViewPage } from "./src/views/ViewPage";
 import { PaperProvider } from "react-native-paper";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import LoginPage from "./src/views/LoginPage";
+import { useEffect } from "react";
 const Stack = createNativeStackNavigator();
-
-
 
 export default function App() {
   return (
+
         <NavigationContainer>
             <Stack.Navigator>
+                <Stack.Screen name="Login" component={LoginPage}/>
                 <Stack.Screen name="Home" component={HomePage}/>
-                <Stack.Screen name="Registrate" component={RegistratePage}/>
                 <Stack.Screen name="Chat" component={ViewPage}/>
             </Stack.Navigator>
         </NavigationContainer>
+
   );
 }
 
