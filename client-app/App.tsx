@@ -43,10 +43,7 @@ function ContactScreen() {
 
     const fetch = async () => {
       const data = await getUserList();
-
       console.log(data);
-
-
       setUserList(data);
     };
 
@@ -121,7 +118,7 @@ function LogoTitle() {
   }, []);
 
   return (
-    <View className="flex-row w-screen justify-around items-center">
+    <View className="flex-row rounded-lg w-screen justify-around items-center">
       <Text></Text>
       <Text>Weeek Chat</Text>
       <Image style={{ width: 50, height: 50 }} src={user?.picture} />

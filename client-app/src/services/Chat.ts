@@ -15,3 +15,9 @@ export async function getUser(): Promise<User> {
 
   return data as User;
 }
+
+export async function getUserChats() {
+  const { data } = await api.get(`/chats/allUserChats`);
+
+  return data;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { Appbar } from "react-native-paper";
@@ -56,7 +56,8 @@ export default function LoginPage({navigation}) {
 
   return (
     <PaperProvider>
-      <View className="flex-1 justify-end bg-slate-100 w-screen px-8 py-8 ">
+      <View className="flex-1 items-center justify-between bg-white w-screen px-8 py-8 ">
+        <Image style={{ width: 250, height: 250 }} src="https://weeek.net/static/seo/logo.jpg" />
         <View className="flex gap-4">
           <TextInput
             label="Weeek токен"
