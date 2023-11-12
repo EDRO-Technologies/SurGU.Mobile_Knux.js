@@ -39,11 +39,41 @@ export class ChatService {
   }
 
   async createChat(name: string, user: User): Promise<Chat> {
-    return this.chatRep.save(this.chatRep.create({ name, creator: user, users: [{...user}]  }));
+    return this.chatRep.save(
+      this.chatRep.create({
+        name,
+        isPrivate: false,
+        creator: user,
+        users: [{ ...user }],
+      })
+    );
+  }
+
+  async createChatPrivate(
+    name: string,
+    user: User,
+    userTwoId: number
+  ): Promise<Chat> {
+    return this.chatRep.save(
+      this.chatRep.create({
+        name,
+        isPrivate: true,
+        creator: user,
+        users: [{ ...user }, { id: userTwoId }],
+      })
+    );
   }
 
   async addToChat(chatId: number, userId: number) {
-    return this.chatRep.save({ id: chatId, users: [{id: userId}]  });
+    return this.chatRep.save({relations: ['users'], id: chatId, users: [{ id: userId }] });
+  }
+
+  async getAllUserChatsPrivate(userId: number) {
+    return this.chatRep.find({where: {isPrivate: true }, relations: ['users']});
+  }
+
+  async getAllUserChats(userId: number) {
+    return this.chatRep.find({relations: ['users']});
   }
 
   async addMessage(
@@ -57,6 +87,9 @@ export class ChatService {
   }
 
   async getAllMessagesFromChat(chatId: number): Promise<Message[]> {
-    return await this.messageRep.find({ where: { chat: {id: chatId} } });
+    return await this.messageRep.find({
+      where: { chat: { id: chatId } },
+      relations: { user: true },
+    });
   }
 }

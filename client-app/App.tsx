@@ -6,7 +6,7 @@ import { View, TouchableOpacity } from "react-native";
 
 
 import { RegistratePage } from "./src/views/RegistratePage";
-import { HomePage } from "./src/views/HomePage";
+// import { HomePage } from "./src/views/HomePage";
 import { ChatPage } from "./src/views/ChatPage";
 import { ViewPage } from "./src/views/ViewPage";
 import { PaperProvider } from "react-native-paper";

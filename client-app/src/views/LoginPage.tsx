@@ -14,21 +14,38 @@ import {
 } from "react-native-paper";
 import { weekLogin } from "../services/Auth";
 import { AxiosError } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginPage({navigation}) {
   const [token, setToken] = useState<string>(
     "9af588d0-0353-4186-80d5-91f965c240c2"
-
   );
+
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [isBannerVisible, setIsBannerVisible] = useState(true);
+
+  useEffect(() => {
+
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('jwtToken');
+
+      if (token) {
+        navigation.navigate("Home");
+      }
+    }
+
+    getToken();
+  }, []);
 
   const login = async () => {
     setIsFetching(true);
     try {
       const userWithToken = await weekLogin(token);
+      
+      await AsyncStorage.setItem('jwtToken', userWithToken.accessToken);
+      
       console.log({ userWithToken });
-      navigation.navigate("Chat");
+      navigation.navigate("Home");
     } catch (e) {
       const err = e as AxiosError;
 

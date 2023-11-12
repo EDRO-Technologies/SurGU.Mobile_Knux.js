@@ -55,9 +55,12 @@ export class ChatGateway implements OnGatewayConnection {
     const user = await this.chatsService.getUserFromSocket(socket);
 
     const { text, chatId } = msgBody;
-    await this.chatsService.addMessage(text, user, chatId);
+    console.log(`receive_message_${chatId}`, text);
+    const message = await this.chatsService.addMessage(text, user, chatId);
 
     this.server.sockets.emit(`receive_message_${chatId}`, {
+      id: message.id,
+      createdAt: message.createdAt,
       text,
       user,
     });

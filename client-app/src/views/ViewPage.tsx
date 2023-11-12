@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import * as React from 'react';
+import * as React from "react";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { Text, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
@@ -13,34 +13,103 @@ import {
   TextInput,
 } from "react-native-paper";
 // const Stack = createNativeStackNavigator();
-
+import io from "socket.io-client";
 
 import { Component } from "react";
+import { API_URL } from "../serverUrl";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUser } from "../services/Auth";
+import { User } from "../models/User";
 // import { createNativeStackNavigator } from "@react-na
+
+
 
 export const ViewPage = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [user, setUser] = useState<User>();
+
+  let socket;
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          // avatar: "https://memepedia.ru/wp-content/uploads/2023/10/patamushta-ponabirajut-vsjakih-dalbaebav-14.jpg",
+    const startupSocket = async () => {
+      const token = await AsyncStorage.getItem("jwtToken");
+
+      const user = await getUser();
+      setUser(user);
+
+      console.log({token, user});
+
+      socket = io(API_URL, {
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         },
-      },
-    ]);
+      }); // Замените на вашу URL-адрес сервера Socket.IO
+
+      // Обработчик события "connect"
+      socket.on("connect", () => {
+        console.log("Connected to Socket.IO server");
+      });
+
+      // Обработчик события "disconnect"
+      socket.on("disconnect", () => {
+        console.log("Disconnected from Socket.IO server");
+      });
+
+      // Обработчик события "message"
+      socket.on("receive_message_4", (data) => {
+        console.log("Received message 4:", data);
+
+        // if (data.user.id === user.id)
+        //   return;
+
+        setMessages((previousMessages: IMessage[]) =>
+          GiftedChat.append(previousMessages, [
+            {
+              _id: ''+data.id,
+              text: data.text,
+              createdAt: data.createdAt,
+              user: {
+                _id: ''+data.user.id,
+                name: data.user.firstName,
+                avatar: data.user.picture,
+              },
+            } as IMessage,
+          ])
+        );
+      });
+
+      socket.on("message", (data) => {
+        console.log("Received message:", data);
+      });
+    };
+
+    startupSocket();
+    // Отключение сокета при размонтировании компонента
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const onSend = useCallback((messages: IMessage[] = []) => {
-    setMessages((previousMessages: IMessage[]) =>
-      GiftedChat.append(previousMessages, messages),
-    )
-  }, [])
+    setMessages((previousMessages: IMessage[]) => {
+
+      console.log(messages);
+
+      socket.emit("send_message", {
+        text: messages[0].text,
+        chatId: 4
+      });
+
+      return previousMessages;
+      // return GiftedChat.append(previousMessages, messages)
+    }
+    );
+  }, []);
 
   return (
     <View className=" flex-1 flex-col w-full items-center justify-center  bg-slate-200">
@@ -48,58 +117,15 @@ export const ViewPage = () => {
         <GiftedChat
           className="flex-1 flex-row  "
           messages={messages}
-          onSend={messages => onSend(messages)}
+          onSend={(messages) => onSend(messages)}
           user={{
-            _id: 1,
+            _id: ''+user?.id,
+            name: user?.firstName,
+            avatar: user?.picture
           }}
         />
-
       </View>
-       {/* <Text>JSadjasjd</Text> */}
     </View>
   );
 };
 
-// const GetDB = () => {
-//     const [res,set_res] = React.useState("");
-
-//     return(
-//         <PaperProvider>
-//             <View className="flex-1 bg-green-100 w-screen">
-//             <Button className="m-10" icon="camera" mode="contained" onPress={() => set_res(getUser())}>Get</Button>
-//               <Text className="bg-slate-500 p-10 text-center">{res}</Text>
-//             </View>
-//         </PaperProvider>
-//     );
-// };
-
-// const TextInputComponent = (nameInput:string="") => {
-//     const [text, setText] = React.useState("");
-//     return (
-//       <View>
-//         <TextInput
-//           label={nameInput}
-//           value={text}
-//           onChangeText={text => setText(text)}
-//         />
-//         <Text>{text}</Text>
-//       </View>
-//     );
-//   };
-
-// export default function Example() {
-//   const [messages, setMessages] = useState([])
-
-//   return (
-//     <View className="flex-1 w-97 items-center justify-center  bg-blue-700">
-//       <GiftedChat
-//         className="flex-1 flex-row"
-//         messages={messages}
-//         user={{
-//           _id: 1,
-//         }}
-//       />
-//       <Text>Hello</Text>
-//     </View>
-//   )
-// }
