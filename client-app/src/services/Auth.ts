@@ -15,3 +15,9 @@ export async function getUser(): Promise<User> {
 
   return data as User;
 }
+
+export async function getUserList(): Promise<User[]> {
+  const { data } = await api.get<User[]>(`/user`);
+
+  return data as User[];
+}

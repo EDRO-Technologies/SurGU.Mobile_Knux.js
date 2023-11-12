@@ -4,7 +4,7 @@ import api from "../axios";
 
 
 export async function weekLogin(token: string): Promise<UserToken> {
-  const { data } = await api.get<UserToken>(`/auth/weeek/${token}`);
+  const { data } = await api.get<UserToken>(`/chats/weeek/${token}`);
 
   return data as UserToken;
 }
