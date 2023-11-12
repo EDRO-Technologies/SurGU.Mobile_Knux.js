@@ -59,4 +59,10 @@ export class AuthController {
   test(@Req() req) {
     return 'Hello';
   }
+
+  @Get("user")
+  @UseGuards(Protected)
+  getCurrentuser(@Req() req) {
+    return req.user;
+  } 
 }

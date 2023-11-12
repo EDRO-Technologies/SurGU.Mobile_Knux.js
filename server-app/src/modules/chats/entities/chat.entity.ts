@@ -19,6 +19,9 @@ export class Chat {
 
   @Column()
   name: string;
+
+  @Column({nullable: true})
+  isPrivate: boolean;
   
   @ManyToOne(() => User, (user) => user.creators)//
   creator: User;

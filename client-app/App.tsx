@@ -5,7 +5,7 @@ import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { RegistratePage } from "./src/views/RegistratePage";
-import { HomePage } from "./src/views/HomePage";
+// import { HomePage } from "./src/views/HomePage";
 import { ChatPage } from "./src/views/ChatPage";
 import { ViewPage } from "./src/views/ViewPage";
 
