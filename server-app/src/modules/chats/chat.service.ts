@@ -73,7 +73,7 @@ export class ChatService {
   }
 
   async getAllUserChats(userId: number) {
-    return this.chatRep.find({relations: ['users']});
+    return this.chatRep.find({relations: ['users', 'creator']});
   }
 
   async addMessage(
