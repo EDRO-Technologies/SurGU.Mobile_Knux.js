@@ -1,67 +1,50 @@
+import React, { useState, useCallback, useEffect } from "react";
+import { Appbar, BottomNavigation, Button, Avatar, Card, IconButton, TextInput, PaperProvider } from "react-native-paper";
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-
-import { Appbar, Button } from "react-native-paper";
-import { Avatar, Card, IconButton, TextInput, } from "react-native-paper";
-import { View, TouchableOpacity } from "react-native";
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { RegistratePage } from "./src/views/RegistratePage";
 import { HomePage } from "./src/views/HomePage";
 import { ChatPage } from "./src/views/ChatPage";
 import { ViewPage } from "./src/views/ViewPage";
-import { PaperProvider } from "react-native-paper";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import LoginPage from "./src/views/LoginPage";
-import { useEffect } from "react";
+
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-export default function App() {
+function SettingsScreen() {
   return (
-
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginPage}/>
-                <Stack.Screen name="Home" component={HomePage}/>
-                <Stack.Screen name="Chat" component={ViewPage}/>
-            </Stack.Navigator>
-        </NavigationContainer>
-
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
   );
 }
 
-const HomePage = ({ navigation }) => {
-    return (
-        <View className="flex-1 bg-slate-100 w-screen">
-            {CardTitleChat("gg", "wpjj", navigation.navigate)}
-        </View> 
-    );
-};
+function HomeScreen(){
+  return(
+            <Stack.Navigator>
+              {/* <Stack.Screen name="Login" component={LoginPage}/> */}
+              <Stack.Screen name="Home" component={HomePage}/>
+              <Stack.Screen name="Chat" component={ViewPage}/>
+            </Stack.Navigator>
+  );
+}
 
-const CardTitleChat = (nameChat: string, lastMessage: string, navig: Function) => {
-    return(<TouchableOpacity onPress={() => navig('Chat')}>
-      <Card.Title
-        className="border border-slate-100 bg-white"
-        title={"Chat: " + nameChat}
-        subtitle={"Message: " + lastMessage}
-        left={(props) => <Avatar.Icon {...props} icon="folder" />}
-        // right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
-      />
-    </TouchableOpacity>
-    );
-};
+export default function App() {
+  return (
+          <NavigationContainer>
+            <Tab.Navigator>
+              <Tab.Screen name="HomeWorld" component={HomeScreen} />
+              <Tab.Screen name="Settings" component={SettingsScreen} />
+            </Tab.Navigator>
+          </NavigationContainer>
+  );
+}
 
 
-// export default function App() {
-//   return (
-//     // здесь обертка paper и навигация
-//     <View className="flex-1 items-center justify-center w-full ">
-//       {/* <View1/> */}
-//       <Chat/>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
 
 
